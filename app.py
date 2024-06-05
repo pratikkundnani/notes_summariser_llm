@@ -1,6 +1,7 @@
 from langchain_openai.chat_models import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from langchain.text_splitter import RecursiveCharacterTextSplitter
 import streamlit as st
 import os 
 from dotenv import load_dotenv
@@ -18,12 +19,22 @@ promt = ChatPromptTemplate.from_messages(
 )
 
 st.title("Notes Summariser App using ChatGPT") 
-input_text=st.text_input("Paste the content to summarise")
+input_text=st.chat_input("Paste the content to summarise")
 
 llm=ChatOpenAI(model='gpt-3.5-turbo')
 output_parser=StrOutputParser()
 
-chain= promt | llm | output_parser
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,
+    chunk_overlap=200,
+    length_function=len)
+def summarize_text(input_text):
+    segments = text_splitter.split_text(input_text)
+    summaries = []
+    for segment in segments:
+        response = promt | llm | output_parser
+        summary = response.invoke({'question': segment})
+        summaries.append(summary)
+    return " ".join(summaries)
 
 if input_text: 
-    st.write(chain.invoke({'question': input_text}))
+    st.write(summarize_text(input_text))
