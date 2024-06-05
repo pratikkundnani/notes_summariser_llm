@@ -22,9 +22,9 @@ st.title("Notes Summariser App using ChatGPT")
 input_text=st.text_input("Paste the content to summarise")
 
 llm=ChatOpenAI(model='gpt-3.5-turbo')
-output_parser=StrOutputParser
+output_parser=StrOutputParser()
 
-chain=promt | llm | output_parser
+chain= promt | llm | output_parser
 
 if input_text: 
     st.write(chain.invoke({'question': input_text}))
