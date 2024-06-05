@@ -19,14 +19,35 @@ promt = ChatPromptTemplate.from_messages(
 )
 
 st.title("Notes Summariser App using Ollama") 
-input_text=st.text_input("Paste the content to summarise")
+st.markdown(
+    f"""
+    <style>
+    .reportview-container .main .block-container{{
+        max-width: 1000px;
+    }}
+    .reportview-container .main .block-container .stTextInput {{
+        resize: vertical;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+input_text=st.text_area("Paste the content to summarise")
+
 
 llm=Ollama(model='llama3')
 output_parser=StrOutputParser()
 
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
     chunk_overlap=200,
-    length_function=len)
+    length_function=len, 
+    separators=[
+        "\n\n",
+        "\n"
+    ]
+    )
+
 def summarize_text(input_text):
     segments = text_splitter.split_text(input_text)
     summaries = []
@@ -36,5 +57,5 @@ def summarize_text(input_text):
         summaries.append(summary)
     return " ".join(summaries)
 
-if input_text: 
+if st.button('Summarize'):
     st.write(summarize_text(input_text))

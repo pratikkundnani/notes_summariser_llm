@@ -5,7 +5,6 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 import streamlit as st
 import os 
 from dotenv import load_dotenv
-
 load_dotenv()
 os.environ["OPENAI_API_KEY"]=os.getenv("OPENAI_API_KEY")
 os.environ["LANGCHAIN_TRACING_V2"]=os.getenv("LANGCHAIN_TRACING_V2")
@@ -18,15 +17,36 @@ promt = ChatPromptTemplate.from_messages(
     ]
 )
 
-st.title("Notes Summariser App using ChatGPT") 
-input_text=st.chat_input("Paste the content to summarise")
+st.title("Notes Summariser App using Ollama") 
+st.markdown(
+    f"""
+    <style>
+    .reportview-container .main .block-container{{
+        max-width: 1000px;
+    }}
+    .reportview-container .main .block-container .stTextInput {{
+        resize: vertical;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+input_text=st.text_area("Paste the content to summarise")
+
 
 llm=ChatOpenAI(model='gpt-3.5-turbo')
 output_parser=StrOutputParser()
 
-text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000,
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
     chunk_overlap=200,
-    length_function=len)
+    length_function=len, 
+    separators=[
+        "\n\n",
+        "\n"
+    ]
+    )
+
 def summarize_text(input_text):
     segments = text_splitter.split_text(input_text)
     summaries = []
@@ -36,5 +56,5 @@ def summarize_text(input_text):
         summaries.append(summary)
     return " ".join(summaries)
 
-if input_text: 
+if st.button('Summarize'):
     st.write(summarize_text(input_text))
