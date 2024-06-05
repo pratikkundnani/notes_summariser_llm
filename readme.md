@@ -1,6 +1,6 @@
-# Project Title
+# Notes summariser using LLM
 
-Brief description of the project.
+This app helps summarise large text files using RecursiveTextSplit method under langchain. 
 
 ## Installation
 
@@ -20,7 +20,7 @@ Brief description of the project.
    ```bash
    streamlit run app.py
    ```
-   or if you have ollama installed locally you can use 
+   or if you have ollama installed locally then you can use 
    ```
    streamlit run app_ollama.py
    ```
