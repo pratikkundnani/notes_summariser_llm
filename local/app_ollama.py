@@ -1,4 +1,4 @@
-from langchain_openai.chat_models import ChatOpenAI
+
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -18,21 +18,6 @@ promt = ChatPromptTemplate.from_messages(
     ]
 )
 
-st.title("Notes Summariser App using Ollama") 
-st.markdown(
-    f"""
-    <style>
-    .reportview-container .main .block-container{{
-        max-width: 1000px;
-    }}
-    .reportview-container .main .block-container .stTextInput {{
-        resize: vertical;
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-input_text=st.text_area("Paste the content to summarise")
 
 
 llm=Ollama(model='llama3')
@@ -56,6 +41,24 @@ def summarize_text(input_text):
         summary = response.invoke({'question': segment})
         summaries.append(summary)
     return " ".join(summaries)
+
+
+# Streamlit code 
+st.title("Notes Summariser App using Ollama") 
+st.markdown(
+    f"""
+    <style>
+    .reportview-container .main .block-container{{
+        max-width: 1000px;
+    }}
+    .reportview-container .main .block-container .stTextInput {{
+        resize: vertical;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+input_text=st.text_area("Paste the content to summarise")
 
 if st.button('Summarize'):
     st.write(summarize_text(input_text))
