@@ -1,6 +1,6 @@
 # Notes summariser using LLM
 
-This app helps summarise large text files using RecursiveTextSplit method under langchain. 
+This app helps summarise large text files using RecursiveTextSplit method under langchain. You also can access the analytics of the LLM using langchain's API. 
 
 ## Installation
 
