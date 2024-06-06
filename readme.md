@@ -20,7 +20,7 @@ This app helps summarise large text files using RecursiveTextSplit method under 
    ```bash
    streamlit run app.py
    ```
-   or if you have ollama installed locally then you can use 
+   or if you have ollama llama3 installed locally then you can use 
    ```
    streamlit run app_ollama.py
    ```
